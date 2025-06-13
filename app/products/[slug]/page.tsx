@@ -26,7 +26,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <Header />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <ProductDetail product={product} />
-        <ProductReviews reviews={reviews} />
+        <ProductReviews productId={product.id} reviews={reviews} />
       </main>
       <Footer />
     </div>
