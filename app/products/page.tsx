@@ -1,57 +1,36 @@
-// app/products/page.tsx  
-'use client'
-
-import { useState, useEffect } from 'react'
+// app/products/page.tsx
 import { getProducts, getCollections } from '@/lib/cosmic'
 import Header from '@/components/Header'
-import ProductGrid from '@/components/ProductGrid'
-import CollectionFilter from '@/components/CollectionFilter'
+import ProductsContent from '@/components/ProductsContent'
 import Footer from '@/components/Footer'
 import type { Product, Collection } from '@/types'
 
-export default function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>([])
-  const [collections, setCollections] = useState<Collection[]>([])
-  const [selectedCollection, setSelectedCollection] = useState<string>('')
-  const [loading, setLoading] = useState(true)
+export default async function ProductsPage() {
+  let products: Product[] = []
+  let collections: Collection[] = []
+  let error: string | null = null
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [productsData, collectionsData] = await Promise.all([
-          getProducts(),
-          getCollections()
-        ])
-        setProducts(productsData)
-        setCollections(collectionsData)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [])
-
-  const handleCollectionChange = (collectionSlug: string | null) => {
-    setSelectedCollection(collectionSlug || '')
+  try {
+    const [productsData, collectionsData] = await Promise.all([
+      getProducts(),
+      getCollections()
+    ])
+    products = productsData
+    collections = collectionsData
+  } catch (err) {
+    console.error('Error fetching data:', err)
+    error = 'Failed to load products. Please try again later.'
   }
 
-  const filteredProducts = selectedCollection 
-    ? products.filter(product => 
-        product.metadata.collections?.some((collection: any) => 
-          collection.slug === selectedCollection
-        )
-      )
-    : products
-
-  if (loading) {
+  if (error) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">Loading...</div>
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">Products</h1>
+            <p className="text-red-600">{error}</p>
+          </div>
         </main>
         <Footer />
       </div>
@@ -64,13 +43,8 @@ export default function ProductsPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">All Products</h1>
-          <CollectionFilter 
-            collections={collections}
-            selectedCollection={selectedCollection}
-            onCollectionChange={handleCollectionChange}
-          />
         </div>
-        <ProductGrid products={filteredProducts} />
+        <ProductsContent products={products} collections={collections} />
       </main>
       <Footer />
     </div>
