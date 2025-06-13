@@ -34,8 +34,8 @@ export default function ProductsPage() {
     fetchData()
   }, [])
 
-  const handleCollectionChange = (collectionSlug: string) => {
-    setSelectedCollection(collectionSlug)
+  const handleCollectionChange = (collectionSlug: string | null) => {
+    setSelectedCollection(collectionSlug || '')
   }
 
   const filteredProducts = selectedCollection 
