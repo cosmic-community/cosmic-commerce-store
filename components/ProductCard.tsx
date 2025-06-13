@@ -51,7 +51,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.metadata?.collections && product.metadata.collections.length > 0 && (
             <div className="mt-3">
               <span className="text-sm text-gray-500">
-                {product.metadata.collections[0].title}
+                {product.metadata.collections[0]?.title}
               </span>
             </div>
           )}
