@@ -1,5 +1,4 @@
-<!-- README_START -->
-# Cosmic Commerce Store
+# LFG COSMIC!
 
 A modern e-commerce website built with Next.js and powered by Cosmic CMS. Browse products across different collections, read customer reviews, and enjoy a seamless shopping experience.
 
